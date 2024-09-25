@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Calculator</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="calculator">
+        <div class="display">
+          <input
+            type="text"
+            name="display"
+            id="displayInput"
+            readonly="readonly"
+          />
+          <input
+            type="text"
+            name="display"
+            id="answerInput"
+            readonly="readonly"
+          />
+        </div>
+        <div class="row">
+          <input
+            type="button"
+            value="("
+            class="operation"
+            onclick="show('(')"
+          />
+          <input
+            type="button"
+            value=")"
+            class="operation"
+            onclick="show(')')"
+          />
+          <input
+            type="button"
+            value="ans"
+            class="operation"
+            onclick="show('ans')"
+          />
+          <input type="button" value="del" class="operation" onclick="del()" />
+          <input
+            type="button"
+            value="clear"
+            class="operation"
+            onclick="clean()"
+          />
+        </div>
+        <div class="row">
+          <input type="button" value="7" class="number" onclick="show('7')" />
+          <input type="button" value="8" class="number" onclick="show('8')" />
+          <input type="button" value="9" class="number" onclick="show('9')" />
+          <input
+            type="button"
+            value="%"
+            class="operation"
+            onclick="show('%')"
+          />
+          <input
+            type="button"
+            value="√"
+            class="operation"
+            onclick="show('√')"
+          />
+        </div>
+        <div class="row">
+          <input type="button" value="4" class="number" onclick="show('4')" />
+          <input type="button" value="5" class="number" onclick="show('5')" />
+          <input type="button" value="6" class="number" onclick="show('6')" />
+          <input
+            type="button"
+            value="x"
+            class="operation"
+            onclick="show('*')"
+          />
+          <input
+            type="button"
+            value="÷"
+            class="operation"
+            onclick="show('/')"
+          />
+        </div>
+        <div class="row">
+          <input type="button" value="1" class="number" onclick="show('1')" />
+          <input type="button" value="2" class="number" onclick="show('2')" />
+          <input type="button" value="3" class="number" onclick="show('3')" />
+          <input
+            type="button"
+            value="+"
+            class="operation"
+            onclick="show('+')"
+          />
+          <input
+            type="button"
+            value="-"
+            class="operation"
+            onclick="show('-')"
+          />
+        </div>
+        <div class="row">
+          <input
+            type="button"
+            value="."
+            class="operation"
+            onclick="show('.')"
+          />
+          <input type="button" value="0" class="number" onclick="show('0')" />
+          <input
+            type="button"
+            value="±"
+            class="operation"
+            onclick="toggleSign()"
+          />
+          <input
+            type="button"
+            value="enter"
+            class="enter"
+            onclick="calc(event)"
+          />
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const display = document.getElementById("displayInput");
+      const answer = document.getElementById("answerInput");
+
+      let expression = "";
+      let lastInput = "";
+
+      function show(x) {
+        const operators = ["+", "-", "*", "/", "%", "."];
+
+        if (operators.includes(x) && operators.includes(lastInput)) {
+          return;
+        }
+
+        if (x === "√") {
+          display.value += "√(";
+          expression += "Math.sqrt(";
+        } else if (x === "ans") {
+          display.value += answer.value;
+          expression += answer.value;
+        } else if (x === ")") {
+          display.value += ")";
+          expression += ")";
+        } else {
+          display.value += x;
+          expression += x;
+        }
+        lastInput = x;
+      }
+
+      function calc(event) {
+        event.preventDefault();
+        try {
+          const result = eval(expression);
+          answer.value = result;
+          expression = result.toString();
+        } catch (error) {
+          answer.value = "Error";
+        }
+      }
+
+      function clean() {
+        display.value = "";
+        expression = "";
+        answer.value = "0";
+        lastInput = "";
+      }
+
+      function del() {
+        display.value = display.value.slice(0, -1);
+        expression = expression.slice(0, -1);
+        lastInput = display.value[display.value.length - 1] || "";
+      }
+
+      function toggleSign() {
+        if (expression.length > 0) {
+          expression = `(-1 * (${expression}))`;
+          display.value = `-(${display.value})`;
+        }
+      }
+    </script>
+  </body>
+</html>
